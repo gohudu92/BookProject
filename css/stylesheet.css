@@ -1,0 +1,55 @@
+h1{
+	text-align:center;
+}
+
+.img-circle {
+	width:25%;
+	height:auto;
+}
+
+#book{
+	width:50%;
+	height:auto;
+}
+
+#mybook{
+	width:15%;
+	height:auto;
+}
+
+.bg-1 { 
+       background-color: #1abc9c; /* Green */
+        color: #ffffff;
+    }
+
+.bg-2 { 
+      background-color: #474e5d; /* Dark Blue */
+      color: #ffffff;
+	  padding-top: 70px;
+	  padding-bottom: 70px;
+  }
+  
+.bg-3 { 
+      background-color: #ffffff; /* White */
+      color: #555555;
+  }
+  
+.bg-4 { 
+    background-color: #2f2f2f;
+    color: #ffffff;
+}
+
+#cc {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.navbar{
+	margin-bottom:0px;
+}
+
+.myCenterBlock{
+      display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
