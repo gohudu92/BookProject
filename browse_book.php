@@ -99,7 +99,21 @@ Entrez un mot clé:<br>
 		}
 	}
 	elseif (($title <> "") && ($author <> "")) {
-		$query = "SELECT * FROM livre WHERE title LIKE \"%$title%\" AND author LIKE \"%$author%\"";
+		$arrayAllAuthors=[];
+		$query = "SELECT * FROM author";
+ 		$result = mysqli_query($conn, $query);
+ 		while($donnees = mysqli_fetch_array($result)){
+ 			$arrayAllAuthors[$donnees["id"]]=$donnees["name"];
+ 		}
+ 		foreach ($arrayAllAuthors as $key => $value) {
+ 			if(stristr($value, $author) === FALSE){
+ 				unset($arrayAllAuthors[$key]);
+ 			}
+ 		}
+
+
+		//$query = "SELECT * FROM livre WHERE title LIKE \"%$title%\" AND author LIKE \"%$author%\"";
+		$query = "SELECT * FROM livre WHERE title LIKE \"%$title%\"";
 		$result = mysqli_query($conn, $query);
 		$row = mysqli_fetch_row($result);
 		$Nombre = $row[0];
@@ -108,7 +122,9 @@ Entrez un mot clé:<br>
  			echo "<h2>Aucun résultat ne correspond à votre recherche</h2><p>";
 		}
 		else {
- 			$query = "SELECT * FROM livre WHERE title LIKE \"%$title%\" AND author LIKE \"%$author%\" ORDER by title ASC";
+			foreach ($arrayAllAuthors as $key => $value) {
+
+ 			$query = "SELECT * FROM livre WHERE title LIKE \"%$title%\" AND id_author = $key ORDER by title ASC";
 
  			$result = mysqli_query($conn, $query);
 
@@ -117,48 +133,73 @@ Entrez un mot clé:<br>
  					//if($donnees['id'] <> $book_id){
  						$id = $donnees['id'];
  						$title = $donnees['title'];
- 						$author = $donnees['author'];
+ 						$author = $donnees['id_author'];
  						$pages = $donnees['nb_pages'];
-  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$author.'</b> (<b>'.$pages.'</b> pages) </li>';
+ 						$name_author = $value;
+
+  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$name_author.'</b> (<b>'.$pages.'</b> pages) </li>';
   						echo '<a href="reserve.php?id='.$id.'" /><button type="submit" class="btn btn-primary btn-block">Reserve</button></a>';
  					//}
  				}
+ 			}
 			//}
 		}
 	}
 	elseif (($title == "") && ($author <> "")){
-		$query = "SELECT * FROM livre WHERE author LIKE \"%$author%\"";
-		$result = mysqli_query($conn, $query);
-		$row = mysqli_fetch_row($result);
-		$Nombre = $row[0];
+		$arrayAllAuthors=[];
+		$query = "SELECT * FROM author";
+ 		$result = mysqli_query($conn, $query);
+ 		while($donnees = mysqli_fetch_array($result)){
+ 			$arrayAllAuthors[$donnees["id"]]=$donnees["name"];
+ 		}
+ 		foreach ($arrayAllAuthors as $key => $value) {
+ 			if(stristr($value, $author) === FALSE){
+ 				unset($arrayAllAuthors[$key]);
+ 			}
+ 		}
 
-		if ($Nombre == "0") {
+ 		
+
+ 		
+
+ 		if(empty($arrayAllAuthors)){
  			echo "<h2>Aucun résultat ne correspond à votre recherche</h2><p>";
-		}
-		else {
- 			$query = "SELECT * FROM livre WHERE author LIKE \"%$author%\" ORDER by title ASC";
+ 		}
+ 		else{
+ 			
+ 			foreach ($arrayAllAuthors as $key => $value) {
+ 				$query2 = "SELECT * FROM livre WHERE id_author = $key";
+				$result2 = mysqli_query($conn, $query2);
 
- 			$result = mysqli_query($conn, $query);
-
- 			//foreach ($tab as $key => $book_id) {
- 				while($donnees = mysqli_fetch_array($result)){
- 					//if($donnees['id'] <> $book_id){
+				while($donnees = mysqli_fetch_array($result2)){
  						$id = $donnees['id'];
  						$title = $donnees['title'];
- 						$author = $donnees['author'];
+ 						$id_author = $donnees['id_author'];
  						$pages = $donnees['nb_pages'];
-  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$author.'</b> (<b>'.$pages.'</b> pages) </li>';
+
+ 						$name_author = $value;
+  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$name_author.'</b> (<b>'.$pages.'</b> pages) </li>';
   						echo '<a href="reserve.php?id='.$id.'" /><button type="submit" class="btn btn-primary btn-block">Reserve</button></a>';
  					//}
  				}
-			//}
+ 			}
+
 		}
 	}
 	
 	}
 	else{
-		$query = "SELECT * FROM livre ORDER by title";
 
+		$arrayAllAuthors=[];
+		$query = "SELECT * FROM author";
+ 		$result = mysqli_query($conn, $query);
+ 		while($donnees = mysqli_fetch_array($result)){
+ 			$arrayAllAuthors[$donnees["id"]]=$donnees["name"];
+ 		}
+
+ 		//==================================
+
+		$query = "SELECT * FROM livre ORDER by title";
  		$result = mysqli_query($conn, $query);
  		
  			//foreach ($tab as $key => $book_id) {
@@ -166,9 +207,11 @@ Entrez un mot clé:<br>
  					//if($donnees['id'] <> $book_id){
  						$id = $donnees['id'];
  						$title = $donnees['title'];
- 						$author = $donnees['author'];
+ 						$id_author = $donnees['id_author'];
  						$pages = $donnees['nb_pages'];
-  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$author.'</b> (<b>'.$pages.'</b> pages) </li>';
+ 						
+ 						$name_author=$arrayAllAuthors[$id_author];
+  						echo '<li class="list-group-item"><b>'.$title.'</b> from <b>'.$name_author.'</b> (<b>'.$pages.'</b> pages) </li>';
   						echo '<a href="reserve.php?id='.$id.'" /><button type="submit" class="btn btn-primary btn-block">Reserve</button></a>';
  					//}
  				}

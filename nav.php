@@ -10,6 +10,14 @@
 	  <li class="<?php echo ($current_page=='my_books.php') ? 'active' : NULL ?>"><a href="my_books.php">My Books</a></li>
 	  <li class="<?php echo ($current_page=='contact.php') ? 'active' : NULL ?>"><a href="contact.php">Contact</a></li>
     <li class="<?php echo ($current_page=='gallery.php') ? 'active' : NULL ?>"><a href="gallery.php">Gallery</a></li>
+    <?php
+    if(isset($_SESSION['id']) && $_SESSION["id"] == 5){
+      ?>
+        <li class="<?php echo ($current_page=='admin.php') ? 'active' : NULL ?>"><a href="admin.php">Admin</a></li>
+        <li class="<?php echo ($current_page=='upload_files.php') ? 'active' : NULL ?>"><a href="upload_files.php">Upload photo</a></li>
+      <?php
+    }
+    ?>
     </ul>
     <?php
     if(isset($_SESSION['id'])){
@@ -24,6 +32,7 @@
       <li class="<?php echo ($current_page==\'log_in.php\') ? \'active\' : NULL ?>"><a href="log_in.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     </ul>
     ';}
+
     ?>
 
   </div>
